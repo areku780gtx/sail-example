@@ -31,7 +31,7 @@ $popular= Recipe::select('recipes.id','recipes.title','recipes.description',
 ->orderBy('recipes.views','desc')
 ->limit(3)
 ->get();
-dd($popular);
+//dd($popular);
 
 
 

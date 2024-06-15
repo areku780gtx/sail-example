@@ -30,7 +30,7 @@ DB::table('recipes')->insert([
             'categories_id'=>$categories[array_rand($categories)],
             'title'=>'Recipe of '.Str::random(10),
             'description'=>'This is a sample recipe description for'.Str::random(10),
-            'image'=>'http://source.unsplash.com/radom/?'. $image_types[rand (0,10)],
+            'image'=>'https://picsum.photos/800/?',
             'views'=>rand(0,500),
             'created_at'=>now(),
             'updated_at'=>now(),
