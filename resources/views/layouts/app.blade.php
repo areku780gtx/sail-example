@@ -15,11 +15,12 @@
         <!-- Scripts -->
 
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <link rel="stylesheet" href="css/color.css">
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
+    <body class="font-sans antialiased background-color">
+        <div class="min-h-screen ">
             @include('layouts.annouce-header')
-
+            @include('layouts.global-header')
             <!-- Page Heading -->
             @if (isset($header))
                 <header class="bg-white shadow">
@@ -30,9 +31,10 @@
             @endif
 
             <!-- Page Content -->
-            <main>
+            <main class="container mx-auto pt-8">
                 {{ $slot }}
             </main>
         </div>
+        @include('layouts.footer')
     </body>
 </html>
