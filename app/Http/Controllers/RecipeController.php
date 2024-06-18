@@ -74,6 +74,14 @@ $query->whereIn('recipes.categories_id',$filters['categories']);
 
 
     }
+if(!empty($filters['title']))
+{
+
+$query->where('recipes.title','like','%'.$filters['title'].'%');
+
+
+}
+
 
 
 }
