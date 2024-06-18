@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Recipe;
+use App\Models\Category;
 
 
 class RecipeController extends Controller
@@ -50,17 +51,44 @@ $popular= Recipe::select('recipes.id','recipes.title','recipes.description',
 
 
 
-    public function index()
+    public function index(Request $request)
     {
-        $recipes = Recipe::select('recipes.id','recipes.title','recipes.description',
+
+        $filters=$request->all();
+        
+
+
+
+
+        $query = Recipe::query()->select('recipes.id','recipes.title','recipes.description',
 'recipes.created_at','recipes.image','users.name')
 ->join('users','users.id','=','recipes.user_id')
-->orderBy('created_at','desc')
-->get();
+->orderBy('created_at','desc');
+
+if(!empty($filters))
+{
+//もしカテゴリーが選択されていたら。
+    if(!empty($filters['categories'])){
+//カテゴリーで絞込み選択したカテゴリーのレシピを取得。
+$query->whereIn('recipes.categories_id',$filters['categories']);
+
+
+    }
+
+
+}
+$recipes=$query->get();
+
+$categories= Category::all();
+
+
+
+
+
 
 
 //dd($recipes);
-return view("recipes.index",compact("recipes"));
+return view("recipes.index",compact("recipes","categories"));
 
 
 
