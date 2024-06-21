@@ -61,8 +61,10 @@ $popular= Recipe::select('recipes.id','recipes.title','recipes.description',
 
 
         $query = Recipe::query()->select('recipes.id','recipes.title','recipes.description',
-'recipes.created_at','recipes.image','users.name')
+'recipes.created_at','recipes.image','users.name',\DB::raw('AVG(reviews.rating)as rating'))
 ->join('users','users.id','=','recipes.user_id')
+->leftJoin('reviews','reviews.recipe_id','=','recipes.id')
+->groupBy('recipes.id')
 ->orderBy('created_at','desc');
 
 if(!empty($filters))
@@ -74,6 +76,21 @@ $query->whereIn('recipes.categories_id',$filters['categories']);
 
 
     }
+if(!empty($filters['rating'])){
+
+
+$query->havingRaw('AVG(reviews.rating) >= ?',[$filters['rating']])->orderBy('rating','desc');
+
+
+
+
+
+}
+
+
+
+
+
 if(!empty($filters['title']))
 {
 
@@ -96,7 +113,7 @@ $categories= Category::all();
 
 
 //dd($recipes);
-return view("recipes.index",compact("recipes","categories"));
+return view("recipes.index",compact("recipes","categories","filters"));
 
 
 
