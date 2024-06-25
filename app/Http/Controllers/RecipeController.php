@@ -102,7 +102,7 @@ $query->where('recipes.title','like','%'.$filters['title'].'%');
 
 
 }
-$recipes=$query->get();
+$recipes=$query->paginate(5);
 
 $categories= Category::all();
 

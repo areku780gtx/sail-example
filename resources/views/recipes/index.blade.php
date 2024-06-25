@@ -1,10 +1,16 @@
 <x-app-layout>
     <div class ="grid grid-cols-3 gap-4">
-        <div class="col-span-2 bg-white rounded p-4"> @foreach ($recipes as $recipe)
+        <div class="col-span-2 bg-white rounded p-4"> 
+            {{Breadcrumbs::render('index')}}
+            <div class="mb-4"></div>
+            @foreach ($recipes as $recipe)
             
             @include('recipes.partial.horizontal-card')
                 
             @endforeach
+{{$recipes->links()}}
+
+
         </div>
         <div class="col-span-1 bg-white p-4 h-max sticky top-4">
         <form action="{{route('recipe.index')}}" method="GET">
