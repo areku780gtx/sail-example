@@ -140,7 +140,15 @@ return view("recipes.index",compact("recipes","categories","filters"));
      */
     public function show(string $id)
     {
-        //
+        $recipe=Recipe::find($id);
+        $recipe->increment('views');
+
+        
+        dd($recipe);
+
+        return view('recipes.show',compact('recipe'));
+        
+
     }
 
     /**
