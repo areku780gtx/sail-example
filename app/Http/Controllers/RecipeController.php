@@ -144,10 +144,10 @@ return view("recipes.index",compact("recipes","categories","filters"));
         $recipe->increment('views');
 
         
-        dd($recipe);
+        
 
         return view('recipes.show',compact('recipe'));
-        
+
 
     }
 
