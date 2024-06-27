@@ -9,4 +9,24 @@ class Review extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    public function recipe()
+    {
+    
+    return $this->belongTo(Recipe::class);
+    
+    
+    }
+    public function user()
+
+    {
+
+        return $this->belongsTo(User::class);
+
+
+
+    }
+
+
+
 }

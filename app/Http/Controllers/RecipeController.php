@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Recipe;
 use App\Models\Category;
-
+use App\Models\Ingredient;
 
 class RecipeController extends Controller
 {
@@ -140,8 +140,17 @@ return view("recipes.index",compact("recipes","categories","filters"));
      */
     public function show(string $id)
     {
-        $recipe=Recipe::find($id);
-        $recipe->increment('views');
+        $recipe=Recipe::with('ingredients','steps','reviews.user','user')
+        ->where('recipes.id',$id)
+        ->get()
+        ->first();
+
+
+        $recipe_recode=Recipe::find($id);
+        // $ingredients= Ingredient::where('recipe_id',$recipe['id'])->get();
+        // $steps=Step::where('recipe_id',$recipe['id'])->get();
+     //上と等価
+        $recipe_recode->increment('views');
 
         
         

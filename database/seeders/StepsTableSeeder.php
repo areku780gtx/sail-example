@@ -24,7 +24,7 @@ class StepsTableSeeder extends Seeder
                 DB::table('steps')->insert([
                     'recipe_id'=>$recipeId,
                     'step_number'=>$i,
-                    'description'=>'Step'. $i > 'description for recipe' .$recipeId,
+                    'description'=>'Step'. $i .'description for recipe' . $recipeId,
                     'created_at'=>now(),
                     'updated_at'=>now(),
 
