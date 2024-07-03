@@ -1,20 +1,21 @@
 <x-app-layout>
-    {{Breadcrumbs::render('show',$recipe)}}
+    
 //レシピ詳細
 
 <div class ="p-4 max auto bg-white rounded">
-<div class="grid grid-cols-2 rounded border border-black">
+    {{Breadcrumbs::render('show',$recipe)}}
+
+<div class="grid grid-cols-2 rounded border border-gray-500 mt-4">
 <div class="col-span-1">
-    <img class ="object-cover rounded-t-lg h-40 w-full mrounded-none 
-    rounded-l-lg" src="{{$recipe['image']}}" alt="{{$recipe->title}}">
+    <img class ="object-cover rounded-t-lg  w-full aspect-square" src="{{$recipe['image']}}" alt="{{$recipe->title}}">
 
 </div>
 
-<div class="col-span-1">
-    <p>{{$recipe['description']}}</p>
-    <p>{{$recipe['user']['name']}}</p>
+<div class="col-span-1 p-4">
+    <p class="mb-4">{{$recipe['description']}}</p>
+    <p clsss="mb-4 text-gray-500">{{$recipe['user']['name']}}</p>
     <h4 class ="text-2xl font-bold mb-2">材料</h4>
-    <ul>
+    <ul class ="text-gray-500 ml-6" >
 @foreach($recipe['ingredients'] as $i)
 
 
@@ -33,12 +34,12 @@
 <br>
 steps
 <div class="">
-<h4 class="text-2xl font-bold mb-2">作り方</h4>
-
+<h4 class="text-2xl font-bold mb-6">作り方</h4>
+<div class ="grid grid-cols-4 gap-4">
 @foreach($recipe['steps'] as $s)
-<div class="flex items-center mb-2">
-    <div class="w-10 h-10 flex items-center justify-center bg-gray-200
-    rounded-full mr-4">
+<div class="items-center mb-2 background-color p-2">
+    <div class="w-10 h-10 flex items-center justify-center bg-gray-100
+    rounded-full mr-4 mb-2">
     {{$s['step_number']}}
 
     </div>
@@ -55,7 +56,7 @@ steps
 
 
 
-
+</div>
 
 
 
@@ -68,10 +69,13 @@ reviews
 <div class="w-10/12 p-4 mx-auto bg-white rounded">
 
 <h4 class ="text-2xl font-bold mb-2">レビュー</h4>
+@if(count($recipe['reviews'])===0)
+<p>まだレビューはありません</p>
+@endif
 @foreach($recipe['reviews'] as $r)
 
-<div class ="backgorund-color rounded">
-    <div class="flex">
+<div class ="background-color rounded mb-4 p-4">
+    <div class="flex mb-4">
 @for ($i=0;$i<$r['rating'];$i++)
 
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 text-yellow-400">
@@ -80,14 +84,17 @@ reviews
   
   @endfor
 
-        <p>{{$r['comment']}}</p>
+        <p class ="ml-2">{{$r['comment']}}</p>
     </div>
 
-<p>{{$r['user']['name']}}</p>
+<p class="text-gray-600 font-bold">{{$r['user']['name']}}</p>
 
 </div>
 
 @endforeach
+
+
+
 
 
 </div>
