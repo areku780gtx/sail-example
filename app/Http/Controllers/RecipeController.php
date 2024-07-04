@@ -9,6 +9,7 @@ use App\Models\Ingredient;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Step;
 
 class RecipeController extends Controller
 {
@@ -143,23 +144,51 @@ return view("recipes.index",compact("recipes","categories","filters"));
       
 
         $posts = $request->all();
+        $uuid=Str::uuid()->toString();
+        
+
+        
        // dd($posts);
-        $image=$request->file('image');
-        $path=Storage::disk('s3')->putFile('recipe',$image,'public');
-        $url=Storage::disk('s3')->url($path);
+        // $image=$request->file('image');
+        // $path=Storage::disk('s3')->putFile('recipe',$image,'public');
+        // $url=Storage::disk('s3')->url($path);
        // dd($url);
 
 
 
         Recipe::insert([
-            'id'=>Str::uuid(),
+            'id'=>$uuid,
             'title'=>$posts['title'],
             'description'=>$posts['description'],
             'categories_id'=>$posts['category'],
-            'image'=>$url,
+            // 'image'=>$url,
             'user_id'=>Auth::id(),
 
         ]);
+
+        $steps=[];
+        foreach($posts['steps']as $key=>$step){
+            $steps[$key]=[
+
+                'recipe_id'=>$uuid,
+                'step_number'=>$key+1,
+                'description'=>$step
+
+
+
+
+
+            ];
+
+
+
+
+
+        }
+
+
+STEP::insert($steps);
+
 
 
 
