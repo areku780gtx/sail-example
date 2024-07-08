@@ -166,6 +166,26 @@ return view("recipes.index",compact("recipes","categories","filters"));
 
         ]);
 
+        $ingredients=[];
+        foreach($posts['ingredients']as $key=>$ingredient){
+
+            $ingredients[$key]=[
+                'recie_id'=>$uuid,
+                'name'=>$ingredient['name'],
+                'quantity'=>$ingredient['quantity']
+
+            ];
+
+
+
+
+
+        }
+
+
+ Ingredient::insert($ingredients);
+ 
+
         $steps=[];
         foreach($posts['steps']as $key=>$step){
             $steps[$key]=[
