@@ -24,6 +24,7 @@
         <div class="min-h-screen ">
             @include('layouts.annouce-header')
             @include('layouts.global-header')
+            @include('flash::message')
             <!-- Page Heading -->
             @if (isset($header))
                 <header class="bg-white shadow">

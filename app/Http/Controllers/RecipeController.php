@@ -9,6 +9,11 @@ use App\Models\Ingredient;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
+
+
 use App\Models\Step;
 
 class RecipeController extends Controller
@@ -148,11 +153,14 @@ return view("recipes.index",compact("recipes","categories","filters"));
         
 
         
-       // dd($posts);
-        // $image=$request->file('image');
-        // $path=Storage::disk('s3')->putFile('recipe',$image,'public');
-        // $url=Storage::disk('s3')->url($path);
+     //  dd($posts);
+        $image=$request->file('image');
+        $path=Storage::disk('s3')->putFile('recipe',$image,'public');
+        $url=Storage::disk('s3')->url($path);
        // dd($url);
+
+try
+{
 
 
 
@@ -161,7 +169,7 @@ return view("recipes.index",compact("recipes","categories","filters"));
             'title'=>$posts['title'],
             'description'=>$posts['description'],
             'categories_id'=>$posts['category'],
-            // 'image'=>$url,
+             'image'=>$url,
             'user_id'=>Auth::id(),
 
         ]);
@@ -170,7 +178,7 @@ return view("recipes.index",compact("recipes","categories","filters"));
         foreach($posts['ingredients']as $key=>$ingredient){
 
             $ingredients[$key]=[
-                'recie_id'=>$uuid,
+                'recipe_id'=>$uuid,
                 'name'=>$ingredient['name'],
                 'quantity'=>$ingredient['quantity']
 
@@ -187,7 +195,7 @@ return view("recipes.index",compact("recipes","categories","filters"));
  
 
         $steps=[];
-        foreach($posts['steps']as $key=>$step){
+        foreach($posts['steps-array']as $key=>$step){
             $steps[$key]=[
 
                 'recipe_id'=>$uuid,
@@ -208,11 +216,24 @@ return view("recipes.index",compact("recipes","categories","filters"));
 
 
 STEP::insert($steps);
+DB::commit();
+
+
+    }catch(\Throwable $th){
+
+
+    DB::rollBack();
+    \Log::debug(print_r($th->getMessage(),true));
 
 
 
+    throw $th;
+
+    }
 
 
+
+return redirect()->route('recipe.show',['id'=>$uuid]);
 
         
     }
