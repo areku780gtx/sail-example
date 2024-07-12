@@ -7,6 +7,7 @@ use App\Models\Recipe;
 use App\Models\Category;
 use App\Models\Ingredient;
 use Illuminate\Support\Str;
+use App\Http\Requests\RecipeCreateRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
@@ -144,7 +145,7 @@ return view("recipes.index",compact("recipes","categories","filters"));
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(RecipeCreateRequest $request)
     {
       
 
@@ -231,7 +232,7 @@ DB::commit();
 
     }
 
-
+flash()->success('レシピを投稿しました。');
 
 return redirect()->route('recipe.show',['id'=>$uuid]);
 
@@ -255,10 +256,16 @@ return redirect()->route('recipe.show',['id'=>$uuid]);
      //上と等価
         $recipe_recode->increment('views');
 
-        
-        
+        $is_my_recipe=false;
+     
+        if(Auth::check()&&Auth::id()==$recipe->user_id){
 
-        return view('recipes.show',compact('recipe'));
+            $is_my_recipe=true;
+
+        }
+
+
+        return view('recipes.show',compact('recipe','is_my_recipe'));
 
 
     }
@@ -268,7 +275,14 @@ return redirect()->route('recipe.show',['id'=>$uuid]);
      */
     public function edit(string $id)
     {
-        //
+        $recipe=Recipe::with('ingredients','steps','reviews.user','user')
+        ->where('recipes.id',$id)
+        ->get()
+        ->first();
+        $categories=Category::all();
+
+      return view('recipes.edit',compact('recipe','categories'));
+
     }
 
     /**

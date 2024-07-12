@@ -62,10 +62,13 @@ steps
 
 </div>
 </div>
+@if($is_my_recipe)
+<a href="{{route('recipe.edit',$recipe)}}" class="my-4 block w-2/12 mx-auto p-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-center">
+    レシピを編集する
+</a>
+@endif
 
 
-
-reviews
 <div class="w-10/12 p-4 mx-auto bg-white rounded">
 
 <h4 class ="text-2xl font-bold mb-2">レビュー</h4>
