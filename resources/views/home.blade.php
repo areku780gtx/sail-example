@@ -48,10 +48,10 @@
         
         @foreach($popular as $p)
         
-        <a href="{{route('recipe.show',['id'=>$recipe['id']])}}" class="max-12 rounded overflow-hidden shadow-lg mx-4">
+        <a href="{{route('recipe.show',['id'=>$p['id']])}}" class="max-12 rounded overflow-hidden shadow-lg mx-4">
             <img class="max-h-52 h-52 w-full object-cover" src="{{$p->image}}" alt="{{$p->title}}">
             <div class="px-6 py-4">
-              <div class="font-bold text-xl mb-2">{{$p->title}}</div>
+              <div class="font-bold text-lg mb-2">{{$p->title}}</div>
               <p class="text-gray-700 text-base">
                 {{$p->description}}
               </p>
