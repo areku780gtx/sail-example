@@ -141,4 +141,11 @@ window.onload = function () {
 
         ingredients.appendChild(ingredient);
     });
+
+    var destroy = document.getElementById("delete");
+    destroy.addEventListener("click", function () {
+        if (!confirm("削除しますか？")) {
+            evt.preventDefault();
+        }
+    });
 };

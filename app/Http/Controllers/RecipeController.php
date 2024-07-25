@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Ingredient;
 use Illuminate\Support\Str;
 use App\Http\Requests\RecipeCreateRequest;
+use App\Http\Requests\RecipeUpdateRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
@@ -178,7 +179,7 @@ try
         foreach($posts['ingredients']as $key=>$ingredient){
 
             $ingredients[$key]=[
-                'recipe_id'=>$id,
+                'recipe_id'=>$uuid,
                 'name'=>$ingredient['name'],
                 'quantity'=>$ingredient['quantity']
 
@@ -254,7 +255,6 @@ return redirect()->route('recipe.show',['id'=>$uuid]);
         // $steps=Step::where('recipe_id',$recipe['id'])->get();
      //上と等価
         $recipe_recode->increment('views');
-
         $is_my_recipe=false;
      
         if(Auth::check()&&Auth::id()==$recipe->user_id){
@@ -262,9 +262,15 @@ return redirect()->route('recipe.show',['id'=>$uuid]);
             $is_my_recipe=true;
 
         }
+        $is_reviewed=false;
+        if(Auth::check()){
+
+            $is_reviewed=$recipe->reviews->contains('user_id',Auth::id());
+        }
 
 
-        return view('recipes.show',compact('recipe','is_my_recipe'));
+
+        return view('recipes.show',compact('recipe','is_my_recipe','is_reviewed'));
 
 
     }
@@ -278,16 +284,24 @@ return redirect()->route('recipe.show',['id'=>$uuid]);
         ->where('recipes.id',$id)
         ->get()
         ->first()->toArray();
+if(!Auth::check()||(Auth::id()!==$recipe['user_id'])){
+
+    abort(403);
+    
+}
+
+
         $categories=Category::all();
 
       return view('recipes.edit',compact('recipe','categories'));
 
     }
+    
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(RecipeUpdateRequest $request, string $id)
     {
         
 
@@ -393,5 +407,12 @@ return redirect()->route('recipe.show',['id'=>$id]);
     public function destroy(string $id)
     {
         //
+    
+    Recipe::find($id)->delete();
+    flash()->warning('レシピを削除しました。');
+    return redirect()->route('home');
+    
     }
+
+
 }
